@@ -10,6 +10,7 @@ PROFILE = "/profile"
 ANALYSIS = "/analysis"
 BALANCE_SHEET = "/balance-sheet"
 COMPANIES = []
+DATA_FILE = "processed_companies.pkl"
 
 
 class Company:
@@ -33,7 +34,6 @@ class Company:
 def update():
     preprocessed = json.load(open("companies.json"))
     pp = pprint.PrettyPrinter(indent=3)
-    # preprocessed = [preprocessed[0]]
     main_counter = 0
     for entity in preprocessed:
         sym, name = entity['ACT Symbol'], entity['Company Name']
@@ -66,7 +66,7 @@ def update():
                     volume = None
             elif i == 7:
                 avg_volume = result.get_text()
-                if avg_volume != 'N/A':
+                if avg_volume != 'N/A' and avg_volume:
                     avg_volume = float(avg_volume.replace(',', ''))
                 else:
                     avg_volume = None
@@ -183,13 +183,82 @@ def update():
         main_counter += 1
         if main_counter % 100 == 0:
             print(main_counter)
+    with open(DATA_FILE, "wb") as f:
+        pickle.dump(COMPANIES, f)
 
 
-def filter():
+
+def filter(
+        min_price: int = None,
+        max_price: int = None,
+        min_peratio: int = None,
+        max_peratio: int = None,
+        min_volume: int = None,
+        max_volume: int = None,
+        min_market_cap: int = None,
+        max_market_cap: int = None,
+        min_ebitda: int = None,
+        max_ebitda: int = None,
+        min_avg_volume: int = None,
+        max_avg_volume: int = None,
+        min_revenue: int = None,
+        max_revenue: int = None,
+        min_profit: int = None,
+        max_profit: int = None,
+        min_interest_expense: int = None,
+        max_interest_expense: int = None,
+        min_liabilities: int = None,
+        max_liabilities: int = None,
+        industry: list = None,
+        sector: list = None
+):
     # TODO: Write code to filter basic filtering
-    print("This is the filter functions")
+    with open(DATA_FILE, 'rb') as f:
+        companies = pickle.load(f)
+    filtered_companies = []
+    for company in companies:
+        if company.Price:
+            if min_price and company.Price and company.Price < min_price:
+                print("jere")
+                continue
+            if max_price and company.Price and company.Price > max_price:
+                print("jere")
+                continue
+        if min_peratio and company.PERatio and company.PERatio < min_peratio:
+            continue
+        if max_peratio and company.PERatio and company.PERatio > max_peratio:
+            continue
+        if min_volume and company.Volume and company.Volume < min_volume:
+            continue
+        if max_volume and company.Volume > max_volume:
+            continue
+        if min_market_cap and company.MarketCap and company.MarketCap < min_market_cap:
+            continue
+        if max_market_cap and company.MarketCap and company.MarketCap < max_market_cap:
+            continue
+
+        filtered_companies.append(company)
+    return filtered_companies
+
+def clean():
+    companies = []
+    with open(DATA_FILE, 'rb') as f:
+        companies = pickle.load(f)
+    cleaned_companies = []
+    for c in companies:
+        if c.Price:
+            cleaned_companies.append(c)
+        else:
+            print(f"{c.Name} : {c.SYM}")
+    print(len(cleaned_companies))
 
 
 if __name__ == '__main__':
-    update()
-    pickle.dump(COMPANIES, open("processed_companies.pkl", "wb"))
+    # update()
+    clean()
+    # x = filter(
+    #     min_price=1,
+    #     max_price=5
+    # )
+    # print(len(x))
+    # print(x[0].Name
