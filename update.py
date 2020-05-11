@@ -20,7 +20,7 @@ for entity in preprocessed:
     page = requests.get(f"{BASE_URL}")
     soup = BeautifulSoup(page.content, features='html.parser')
     results = soup.find_all('span', {'class': 'Trsdu(0.3s) Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(b)'})
-    print = None
+    price = None
     try:
         price = results[0].get_text()
         price = float(price.replace(',', ''))
