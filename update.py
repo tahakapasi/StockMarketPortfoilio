@@ -6,6 +6,7 @@ import pickle
 import requests
 from bs4 import BeautifulSoup
 import pprint
+import datetime
 
 
 COMPANIES = []
@@ -165,3 +166,4 @@ for entity in preprocessed:
         print(main_counter)
 with open(main.DATA_FILE, "wb") as f:
     pickle.dump(COMPANIES, f)
+print(f"Complete: {datetime.datetime.now()}")
