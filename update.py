@@ -164,6 +164,9 @@ for entity in preprocessed:
     main_counter += 1
     if main_counter % 100 == 0:
         print(main_counter)
+    for c in COMPANIES:
+        if not c.Price:
+            COMPANIES.remove(c)
 with open(main.DATA_FILE, "wb") as f:
     pickle.dump(COMPANIES, f)
 print(f"Complete: {datetime.datetime.now()}")
