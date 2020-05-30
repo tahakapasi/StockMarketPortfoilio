@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cd /home/ubuntu/StockMarketPortfolio/
+cd /home/ubuntu/StockMarketPortfoilio/
 ./update.py
