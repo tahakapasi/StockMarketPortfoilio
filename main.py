@@ -55,18 +55,15 @@ def filter(
         industry: list = None,
         sector: list = None
 ):
-    # TODO: Write code to filter basic filtering
     with open(DATA_FILE, 'rb') as f:
         companies = pickle.load(f)
     filtered_companies = []
     for company in companies:
-        if company.Price:
-            if min_price and company.Price and company.Price < min_price:
-                print("jere")
-                continue
-            if max_price and company.Price and company.Price > max_price:
-                print("jere")
-                continue
+        company = Company(company)
+        if min_price and company.Price < min_price:
+            continue
+        if max_price and company.Price > max_price:
+            continue
         if min_peratio and company.PERatio and company.PERatio < min_peratio:
             continue
         if max_peratio and company.PERatio and company.PERatio > max_peratio:
@@ -79,16 +76,39 @@ def filter(
             continue
         if max_market_cap and company.MarketCap and company.MarketCap < max_market_cap:
             continue
+        if min_avg_volume and company.AverageVolume and company.AverageVolume < min_avg_volume:
+            continue
+        if max_avg_volume and company.AverageVolume and company.AverageVolume > max_avg_volume:
+            continue
+        if min_revenue and company.RevenueHistory and company.RevenueHistory[0] < min_revenue:
+            continue
+        if max_revenue and company.RevenueHistory and company.RevenueHistory[0] > max_revenue:
+            continue
+        if min_profit and company.ProfitHistory and company.ProfitHistory[0] < min_profit:
+            continue
+        if max_profit and company.ProfitHistory and company.ProfitHistory[0] > max_profit:
+            continue
+        if min_interest_expense and company.InterestExpenseHistory and company.InterestExpenseHistory[0] < min_profit:
+            continue
+        if max_interest_expense and company.InterestExpenseHistory and company.InterestExpenseHistory[0] > max_profit:
+            continue
+        if min_liabilities and company.Liabilities and company.Liabilities[0] < min_liabilities:
+            continue
+        if max_liabilities and company.Liabilities and company.Liabilities[0] > max_liabilities:
+            continue
+        if industry and company.Industry and company.Industry not in industry:
+            continue
+        if sector and company.Sector and company.Sector not in sector:
+            continue
 
         filtered_companies.append(company)
     return filtered_companies
 
 
 if __name__ == '__main__':
-    # update()
-    # x = filter(
-    #     min_price=1,
-    #     max_price=5
-    # )
+    with open(DATA_FILE, 'rb') as f:
+        companies = pickle.load(f)
+    print(companies[0].SYM)
+    print(companies[0].RevenueHistory)
+    # x = filter()
     # print(len(x))
-    # print(x[0].Name
