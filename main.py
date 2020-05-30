@@ -110,5 +110,4 @@ if __name__ == '__main__':
         companies = pickle.load(f)
     print(companies[0].SYM)
     print(companies[0].RevenueHistory)
-    # x = filter()
-    # print(len(x))
+    x = filter()
