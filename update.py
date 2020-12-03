@@ -207,10 +207,9 @@ pp = pprint.PrettyPrinter(indent=3)
 main_counter = 0
 nasdaq_list_loader()
 other_list_loader()
-exit()
 for entity in PREPROCESSED:
     company_dict = get_data(entity)
-    pp.pprint(company_dict)
+    # pp.pprint(company_dict)
     cmpny = company.Company(**company_dict)
     COMPANIES.append(cmpny)
     main_counter += 1
