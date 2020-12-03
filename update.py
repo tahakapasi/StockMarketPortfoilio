@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+# Look at this URL for list data schema
+# http://www.nasdaqtrader.com/trader.aspx?id=symboldirdefs
+
+import company
 import main
 import json
 import pickle
@@ -9,18 +13,19 @@ import pprint
 import datetime
 
 
-COMPANIES = []
-
-
-preprocessed = json.load(open("companies.json"))
-pp = pprint.PrettyPrinter(indent=3)
-main_counter = 0
-for entity in preprocessed:
-    sym, name = entity['ACT Symbol'], entity['Company Name']
+def get_data(row):
+    sym, name, etf = row['SYM'], row['Name'], row['ETF']
+    if etf:
+        if etf == 'Y':
+            etf = True
+        else:
+            etf = False
+    else:
+        etf = False
     BASE_URL = main.HOME_URL + sym
     page = requests.get(f"{BASE_URL}")
     soup = BeautifulSoup(page.content, features='html.parser')
-    results = soup.find_all('span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)q'})
+    results = soup.find_all('span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'})
     price = None
     try:
         price = results[0].get_text()
@@ -55,7 +60,7 @@ for entity in preprocessed:
             # TODO: convert this to a number
             market_cap = result.get_text()
             if 'T' in market_cap:
-                market_cap = float(market_cap.replace('T',''))
+                market_cap = float(market_cap.replace('T', ''))
                 multiplier = 1000000000000
                 market_cap = market_cap * multiplier
             elif 'B' in market_cap:
@@ -101,7 +106,7 @@ for entity in preprocessed:
             'Ta(c) Py(6px) Bxz(bb) BdB Bdc($seperatorColor) Miw(120px) '
             'Miw(140px)--pnclg Bgc($lv1BgColor) fi-row:h_Bgc($hoverBgColor) D(tbc)',
             'Ta(c) Py(6px) Bxz(bb) BdB Bdc($seperatorColor) Miw(120px) Miw(140px)--pnclg D(tbc)'
-                  ]
+        ]
     })
     i = 0
     revenue_history = []
@@ -145,6 +150,7 @@ for entity in preprocessed:
     company_dict = {
         'SYM': sym,
         'Name': name,
+        'ETF': etf,
         'Price': price,
         'Volume': volume,
         'Average Volume': avg_volume,
@@ -158,9 +164,49 @@ for entity in preprocessed:
         'Interest Expense History': interest_expense_history,
         'Liabilities': liabilities
     }
-    # pp.pprint(company_dict)
-    company = main.Company(**company_dict)
-    COMPANIES.append(company)
+    return company_dict
+
+COMPANIES = []
+PREPROCESSED = []
+
+# Reading NASDAQ file and adding data to list
+def nasdaq_list_loader():
+    with open("nasdaqlisted.txt") as f:
+        f.readline()
+        while row := f.readline():
+            row = row.split('|')
+            entry = {
+                "SYM": row[0],
+                "Name": row[1],
+                "ETF": row[6]
+            }
+            PREPROCESSED.append(entry)
+    PREPROCESSED.remove(PREPROCESSED[len(PREPROCESSED) - 1])
+
+
+def other_list_loader():
+    with open("otherlisted.txt") as f:
+        f.readline()
+        while row := f.readline():
+            row = row.split('|')
+            entry = {
+                "SYM": row[6],
+                "Name": row[1],
+                "ETF": row[4]
+            }
+            PREPROCESSED.append(entry)
+    PREPROCESSED.remove(PREPROCESSED[len(PREPROCESSED) - 1])
+
+
+pp = pprint.PrettyPrinter(indent=3)
+main_counter = 0
+nasdaq_list_loader()
+other_list_loader()
+for entity in PREPROCESSED:
+    company_dict = get_data(entity)
+    pp.pprint(company_dict)
+    cmpny = company.Company(**company_dict)
+    COMPANIES.append(cmpny)
     main_counter += 1
     if main_counter % 100 == 0:
         print(main_counter)

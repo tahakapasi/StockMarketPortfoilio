@@ -2,8 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9c92dbb0-8101-4b30-8b4e-292f4dbb6739" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/company.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/StockMarketPortfoilio.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/StockMarketPortfoilio.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/processed_companies.pkl" beforeDir="false" afterPath="$PROJECT_DIR$/processed_companies.pkl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/companies.json" beforeDir="false" afterPath="$PROJECT_DIR$/companies.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/processed_companies.pkl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/update.py" beforeDir="false" afterPath="$PROJECT_DIR$/update.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,9 +42,30 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="Settings.Chronomorph" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.update">
+  <component name="RunManager" selected="Python.app">
+    <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="StockMarketPortfoilio" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/app.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="StockMarketPortfoilio" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -79,6 +110,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.app" />
         <item itemvalue="Python.update" />
       </list>
     </recent_temporary>
@@ -108,27 +140,5 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Part complete NExt step filtering" />
     <option name="LAST_COMMIT_MESSAGE" value="First Part complete NExt step filtering" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state width="1841" height="273" key="GridCell.Tab.0.bottom" timestamp="1606548194160">
-      <screen x="56" y="27" width="1864" height="1053" />
-    </state>
-    <state width="1841" height="273" key="GridCell.Tab.0.bottom/56.27.1864.1053@56.27.1864.1053" timestamp="1606548194160" />
-    <state width="1841" height="273" key="GridCell.Tab.0.center" timestamp="1606548194160">
-      <screen x="56" y="27" width="1864" height="1053" />
-    </state>
-    <state width="1841" height="273" key="GridCell.Tab.0.center/56.27.1864.1053@56.27.1864.1053" timestamp="1606548194160" />
-    <state width="1841" height="273" key="GridCell.Tab.0.left" timestamp="1606548194159">
-      <screen x="56" y="27" width="1864" height="1053" />
-    </state>
-    <state width="1841" height="273" key="GridCell.Tab.0.left/56.27.1864.1053@56.27.1864.1053" timestamp="1606548194159" />
-    <state width="1841" height="273" key="GridCell.Tab.0.right" timestamp="1606548194160">
-      <screen x="56" y="27" width="1864" height="1053" />
-    </state>
-    <state width="1841" height="273" key="GridCell.Tab.0.right/56.27.1864.1053@56.27.1864.1053" timestamp="1606548194160" />
-    <state x="610" y="223" width="1037" height="737" key="SettingsEditor" timestamp="1599406562137">
-      <screen x="56" y="27" width="2504" height="1413" />
-    </state>
-    <state x="610" y="223" width="1037" height="737" key="SettingsEditor/56.27.2504.1413@56.27.2504.1413" timestamp="1599406562137" />
   </component>
 </project>

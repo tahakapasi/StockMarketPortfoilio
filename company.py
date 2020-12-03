@@ -1,15 +1,9 @@
-HOME_URL = "https://finance.yahoo.com/quote/"
-FINANCIALS = "/financials"
-PROFILE = "/profile"
-ANALYSIS = "/analysis"
-BALANCE_SHEET = "/balance-sheet"
-COMPANIES = []
-DATA_FILE = "processed_companies.pkl"
-
-
+# Symbol|Security Name|Market Category|Test Issue|Financial Status|Round Lot Size|ETF|NextShares
+# ACT Symbol|Security Name|Exchange|CQS Symbol|ETF|Round Lot Size|Test Issue|NASDAQ Symbol
 class Company:
     def __init__(self, **kwargs):
         self.SYM = kwargs['SYM']
+        self.ETF = kwargs['ETF']
         self.Name = kwargs['Name']
         self.Price = kwargs['Price']
         self.Volume = kwargs['Volume']
