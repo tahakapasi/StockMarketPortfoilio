@@ -169,11 +169,13 @@ def get_data(row):
 COMPANIES = []
 PREPROCESSED = []
 
+
 # Reading NASDAQ file and adding data to list
 def nasdaq_list_loader():
     with open("nasdaqlisted.txt") as f:
         f.readline()
-        while row := f.readline():
+        row = f.readline()
+        while row:
             row = row.split('|')
             entry = {
                 "SYM": row[0],
@@ -181,13 +183,15 @@ def nasdaq_list_loader():
                 "ETF": row[6]
             }
             PREPROCESSED.append(entry)
+            row = f.readline()
     PREPROCESSED.remove(PREPROCESSED[len(PREPROCESSED) - 1])
 
 
 def other_list_loader():
     with open("otherlisted.txt") as f:
         f.readline()
-        while row := f.readline():
+        row = f.readline()
+        while row:
             row = row.split('|')
             entry = {
                 "SYM": row[6],
@@ -195,6 +199,7 @@ def other_list_loader():
                 "ETF": row[4]
             }
             PREPROCESSED.append(entry)
+            row = f.readline()
     PREPROCESSED.remove(PREPROCESSED[len(PREPROCESSED) - 1])
 
 
@@ -202,6 +207,7 @@ pp = pprint.PrettyPrinter(indent=3)
 main_counter = 0
 nasdaq_list_loader()
 other_list_loader()
+exit()
 for entity in PREPROCESSED:
     company_dict = get_data(entity)
     pp.pprint(company_dict)
