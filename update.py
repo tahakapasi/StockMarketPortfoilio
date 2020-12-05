@@ -74,7 +74,10 @@ def get_data(row):
         elif i == 10:
             peratio = result.get_text()
             if peratio != 'N/A':
-                peratio = float(peratio.replace(',', ''))
+                try:
+                    peratio = float(peratio.replace(',', ''))
+                except ValueError:
+                    peratio = None
             else:
                 peratio = None
         elif i == 11:
