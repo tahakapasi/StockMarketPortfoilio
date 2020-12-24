@@ -17,3 +17,18 @@ class Company:
         self.ProfitHistory = kwargs['Profit History']
         self.InterestExpenseHistory = kwargs['Interest Expense History']
         self.Liabilities = kwargs['Liabilities']
+
+    def is_valid(self):
+        if self.SYM != 'Y' and self.Price and isinstance(self.Price, float) and \
+                self.Volume and isinstance(self.Volume, float) and \
+                self.AverageVolume and isinstance(self.AverageVolume, float) and \
+                self.MarketCap and isinstance(self.MarketCap, float) and \
+                self.EPS and isinstance(self.EPS, float):
+                if self.EPS < 0:
+                    return True
+                if self.PERatio and isinstance(self.PERatio, float):
+                    return True
+                else:
+                    return False
+        else:
+            return False

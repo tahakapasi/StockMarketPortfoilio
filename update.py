@@ -59,18 +59,22 @@ def get_data(row):
         elif i == 8:
             # TODO: convert this to a number
             market_cap = result.get_text()
-            if 'T' in market_cap:
-                market_cap = float(market_cap.replace('T', ''))
-                multiplier = 1000000000000
-                market_cap = market_cap * multiplier
-            elif 'B' in market_cap:
-                market_cap = float(market_cap.replace('B', ''))
-                multiplier = 1000000000
-                market_cap = market_cap * multiplier
-            elif 'M' in market_cap:
-                market_cap = float(market_cap.replace('M', ''))
-                multiplier = 1000000
-                market_cap = market_cap * multiplier
+            if market_cap != 'N/A':
+                if 'T' in market_cap:
+                    market_cap = float(market_cap.replace('T', ''))
+                    multiplier = 1000000000000
+                    market_cap = market_cap * multiplier
+                elif 'B' in market_cap:
+                    market_cap = float(market_cap.replace('B', ''))
+                    multiplier = 1000000000
+                    market_cap = market_cap * multiplier
+                elif 'M' in market_cap:
+                    market_cap = float(market_cap.replace('M', ''))
+                    multiplier = 1000000
+                    market_cap = market_cap * multiplier
+            else:
+                market_cap = None
+
         elif i == 10:
             peratio = result.get_text()
             if peratio != 'N/A':

@@ -3811,9 +3811,7 @@ YVR|Liquid Media Group Ltd. - Common Shares|S|N|N|100|N|N
 YY|JOYY Inc. - American Depositary Shares|Q|N|N|100|N|N
 Z|Zillow Group, Inc. - Class C Capital Stock|Q|N|N|100|N|N
 ZAGG|ZAGG Inc - Common Stock|Q|N|N|100|N|N
-ZAZZT|Tick Pilot Test Stock Class A Common Stock|G|Y|N|100||N
 ZBRA|Zebra Technologies Corporation - Class A Common Stock|Q|N|N|100|N|N
-ZBZZT|Test Pilot Test Stock Class B Common Stock|G|Y|N|100||N
 ZCMD|Zhongchao Inc. - Class A Ordinary Shares|S|N|N|100|N|N
 ZCZZT|Tick Pilot Test Stock Class C |G|Y|N|100||N
 ZEAL|Zealand Pharma A/S - American Depositary Shares|Q|N|N|100|N|N

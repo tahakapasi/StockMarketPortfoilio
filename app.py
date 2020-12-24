@@ -32,17 +32,18 @@ def limits():
         'EPS': {'Min': None, 'Max': None}
     }
     for c in companies:
-        for property in minmax_properties:
-            current_value = getattr(c, property)
-            if isinstance(current_value, float):
-                if not minmax_properties[property]['Min']:
-                    minmax_properties[property]['Min'] = current_value
-                if not minmax_properties[property]['Max']:
-                    minmax_properties[property]['Max'] = current_value
-                if current_value < minmax_properties[property]['Min']:
-                    minmax_properties[property]['Min'] = current_value
-                if current_value > minmax_properties[property]['Max']:
-                    minmax_properties[property]['Max'] = current_value
+        if c.is_valid():
+            for property in minmax_properties:
+                current_value = getattr(c, property)
+                if isinstance(current_value, float):
+                    if not minmax_properties[property]['Min']:
+                        minmax_properties[property]['Min'] = current_value
+                    if not minmax_properties[property]['Max']:
+                        minmax_properties[property]['Max'] = current_value
+                    if current_value < minmax_properties[property]['Min']:
+                        minmax_properties[property]['Min'] = current_value
+                    if current_value > minmax_properties[property]['Max']:
+                        minmax_properties[property]['Max'] = current_value
     return jsonify(minmax_properties)
 
 
@@ -52,62 +53,69 @@ def filter_stock():
         companies = pickle.load(f)
     filtered_companies = []
     for company in companies:
-        if company.Price:
+        if company.is_valid():
             if request.json['Price']['Min'] and company.Price < request.json['Price']['Min']:
                 continue
-            if request.json['Price']['Min'] and company.Price > request.json['Price']['Max']:
+            if request.json['Price']['Max'] and company.Price > request.json['Price']['Max']:
                 continue
-        if 'min_peratio' in request.json and company.PERatio and company.PERatio < request.json['min_peratio']:
+            if company.PERatio:
+                if request.json['PERatio']['Min'] and company.PERatio < request.json['PERatio']['Min']:
+                    continue
+                if request.json['PERatio']['Max'] and company.PERatio > request.json['PERatio']['Max']:
+                    continue
+            if request.json['Volume']['Min'] and company.Volume < request.json['Volume']['Min']:
+                continue
+            if request.json['Volume']['Max'] and company.Volume > request.json['Volume']['Max']:
+                continue
+            if request.json['MarketCap']['Min'] and company.MarketCap < request.json['MarketCap']['Min']:
+                continue
+            if request.json['MarketCap']['Max'] and company.MarketCap > request.json['MarketCap']['Max']:
+                continue
+            if request.json['AverageVolume']['Min'] and company.AverageVolume < request.json['AverageVolume']['Min']:
+                continue
+            if request.json['AverageVolume']['Max'] and company.AverageVolume > request.json['AverageVolume']['Max']:
+                continue
+            if request.json['EPS']['Min'] and company.EPS < request.json['EPS']['Min']:
+                continue
+            if request.json['EPS']['Max'] and company.EPS > request.json['EPS']['Max']:
+                continue
+            if 'min_revenue' in request.json and company.RevenueHistory and company.RevenueHistory[0] < request.json['min_revenue']:
+                continue
+            if 'max_revenue' in request.json and company.RevenueHistory and company.RevenueHistory[0] > request.json['max_revenue']:
+                continue
+            if 'min_profit' in request.json and company.ProfitHistory and company.ProfitHistory[0] < request.json['min_profit']:
+                continue
+            if 'max_profit' in request.json and company.ProfitHistory and company.ProfitHistory[0] > request.json['max_profit']:
+                continue
+            if 'min_interest_expense' in request.json and company.InterestExpenseHistory and company.InterestExpenseHistory[0] < request.json['min_profit']:
+                continue
+            if 'max_interest_expense' in request.json and company.InterestExpenseHistory and company.InterestExpenseHistory[0] > request.json['max_profit']:
+                continue
+            if 'min_liabilities' in request.json and company.Liabilities and company.Liabilities[0] < request.json['min_liabilities']:
+                continue
+            if 'max_liabilities' in request.json and company.Liabilities and company.Liabilities[0] > request.json['max_liabilities']:
+                continue
+            if 'industry' in request.json and company.Industry and company.Industry not in request.json['industry']:
+                continue
+            if 'sector' in request.json and company.Sector and company.Sector not in request.json['sector']:
+                continue
+            filtered_companies.append(vars(company))
+        else:
             continue
-        if 'max_peratio' in request.json and company.PERatio and company.PERatio > request.json['max_peratio']:
-            continue
-        if 'min_volume' in request.json and company.Volume and company.Volume < request.json['min_volume']:
-            continue
-        if 'max_volume' in request.json and company.Volume > request.json['max_volume']:
-            continue
-        if 'min_market_cap' in request.json and company.MarketCap and company.MarketCap < request.json['min_market_cap']:
-            continue
-        if 'max_market_cap' in request.json and company.MarketCap and company.MarketCap < request.json['max_market_cap']:
-            continue
-        if 'min_avg_volume' in request.json and company.AverageVolume and company.AverageVolume < request.json['min_avg_volume']:
-            continue
-        if 'max_avg_volume' in request.json and company.AverageVolume and company.AverageVolume > request.json['max_avg_volume']:
-            continue
-        if 'min_revenue' in request.json and company.RevenueHistory and company.RevenueHistory[0] < request.json['min_revenue']:
-            continue
-        if 'max_revenue' in request.json and company.RevenueHistory and company.RevenueHistory[0] > request.json['max_revenue']:
-            continue
-        if 'min_profit' in request.json and company.ProfitHistory and company.ProfitHistory[0] < request.json['min_profit']:
-            continue
-        if 'max_profit' in request.json and company.ProfitHistory and company.ProfitHistory[0] > request.json['max_profit']:
-            continue
-        if 'min_interest_expense' in request.json and company.InterestExpenseHistory and company.InterestExpenseHistory[0] < request.json['min_profit']:
-            continue
-        if 'max_interest_expense' in request.json and company.InterestExpenseHistory and company.InterestExpenseHistory[0] > request.json['max_profit']:
-            continue
-        if 'min_liabilities' in request.json and company.Liabilities and company.Liabilities[0] < request.json['min_liabilities']:
-            continue
-        if 'max_liabilities' in request.json and company.Liabilities and company.Liabilities[0] > request.json['max_liabilities']:
-            continue
-        if 'industry' in request.json and company.Industry and company.Industry not in request.json['industry']:
-            continue
-        if 'sector' in request.json and company.Sector and company.Sector not in request.json['sector']:
-            continue
-
-        filtered_companies.append(company.SYM)
-
+    # print(vars(filtered_companies[0]))
     return jsonify({"List": filtered_companies,
                     "Count": len(filtered_companies)})
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-     # with open(DATA_FILE, 'rb') as f:
+    # with open(DATA_FILE, 'rb') as f:
     #     companies = pickle.load(f)
     # print(len(companies))
     # for c in companies:
-    # #     if c.SYM == 'AZO' or c.SYM == "NVR":
-    #     if c.SYM == "HCLP":
+    #     # if c.SYM == 'AZO' or c.SYM == "NVR":
+    # #     if c.SYM == "HCLP":
+    #     if c.SYM == "ZAZZT" or c.SYM == "ZBZZT":
     #         companies.remove(c)
     # with open("processed_companies.pkl", 'wb') as f:
     #     pickle.dump(companies, f)
