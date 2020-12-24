@@ -3,9 +3,9 @@ import "./App.css";
 import Navbar from "react-bootstrap/Navbar";
 import FilterBar from "./Filter.js";
 import "bootstrap/dist/css/bootstrap.min.css";
-import NavbarCollapse from "react-bootstrap/esm/NavbarCollapse";
 import CompanyList from "./Company";
 import axios from "axios";
+import { Row, Col, Container } from "react-bootstrap";
 
 class App extends Component {
   state = {
@@ -30,12 +30,14 @@ class App extends Component {
 
   componentDidMount() {
     this.getMinMax();
+    this.fetchCompanyList();
   }
 
   fetchCompanyList() {
     axios
       .post("http://192.168.29.183:5000/filter", this.state.FilterParameters)
       .then((response) => {
+        console.log(response.data.List);
         this.setState({ Companies: response.data.List });
       });
   }
@@ -53,6 +55,9 @@ class App extends Component {
     let newFilterParameters = this.state.FilterParameters;
     newFilterParameters[property] = value;
     this.setState({ FilterParameters: newFilterParameters });
+  }
+
+  onSubmit() {
     this.fetchCompanyList();
   }
 
@@ -61,27 +66,23 @@ class App extends Component {
       <div className="App">
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand>Stock Cart</Navbar.Brand>
-          <NavbarCollapse>
-            <button class="btn btn-primary" id="menu-toggle">
-              Toggle Menu
-            </button>
-          </NavbarCollapse>
         </Navbar>
-        <div className="container-fluid hide-sm">
-          <div className="row">
-            <div className="col bg-light">
-              <div className="container">
+        <Container fluid>
+          <Row>
+            <Col md={4} className="bg-light border-right">
+              <Container>
                 <FilterBar
                   update={this.updateFilterParams.bind(this)}
                   minmax={this.state.MinMax}
+                  submit={this.onSubmit.bind(this)}
                 />
-              </div>
-            </div>
-            <div className="col">
+              </Container>
+            </Col>
+            <Col md={8}>
               <CompanyList Companies={this.state.Companies} />
-            </div>
-          </div>
-        </div>
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }

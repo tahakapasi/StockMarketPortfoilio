@@ -35,67 +35,39 @@ function ValueLabelComponent(props: Props) {
   );
 }
 
-const iOSBoxShadow =
-  "0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)";
-
-const newslider = withStyles({
+const PrettoSlider = withStyles({
   root: {
-    color: "#3880ff",
-    height: 2,
-    padding: "15px 0",
+    color: "#52af77",
+    height: 8,
   },
   thumb: {
-    height: 28,
-    width: 28,
+    height: 24,
+    width: 24,
     backgroundColor: "#fff",
-    boxShadow: iOSBoxShadow,
-    marginTop: -14,
-    marginLeft: -14,
+    border: "2px solid currentColor",
+    marginTop: -8,
+    marginLeft: -12,
     "&:focus, &:hover, &$active": {
-      boxShadow:
-        "0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.3),0 0 0 1px rgba(0,0,0,0.02)",
-      // Reset on touch devices, it doesn't add specificity
-      "@media (hover: none)": {
-        boxShadow: iOSBoxShadow,
-      },
+      boxShadow: "inherit",
     },
   },
   active: {},
   valueLabel: {
-    left: "calc(-50% + 12px)",
-    top: -22,
-    "& *": {
-      background: "transparent",
-      color: "#000",
-    },
+    left: "calc(-50% + 4px)",
   },
   track: {
-    height: 2,
+    height: 8,
+    borderRadius: 4,
   },
   rail: {
-    height: 2,
-    opacity: 0.5,
-    backgroundColor: "#bfbfbf",
-  },
-  mark: {
-    backgroundColor: "#bfbfbf",
     height: 8,
-    width: 1,
-    marginTop: -3,
-  },
-  markActive: {
-    opacity: 1,
-    backgroundColor: "currentColor",
+    borderRadius: 4,
   },
 })(Slider);
 
-function valuetext(value) {
-  return `$ {value}`;
-}
-
 function RangeSlider(props) {
   const classes = useStyles();
-  const [value, setValue] = React.useState([props.min, props.max]);
+  const [value, setValue] = React.useState(props.value);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -106,21 +78,19 @@ function RangeSlider(props) {
   };
 
   return (
+    // props.update(props.name, { Min: props.min, Max: props.max });
     <div className={classes.root}>
       <Typography id="range-slider" gutterBottom>
         {props.name}
       </Typography>
-      <Slider
-        min={props.min}
-        max={props.max}
-        defaultValue={[props.min, props.max]}
+      <PrettoSlider
+        valueLabelDisplay="on"
         value={value}
+        ValueLabelComponent={ValueLabelComponent}
         onChange={handleChange}
         onChangeCommitted={submitChange}
-        valueLabelDisplay="on"
-        aria-labelledby="range-slider"
-        getAriaValueText={valuetext}
-        ValueLabelComponent={ValueLabelComponent}
+        min={props.min}
+        max={props.max}
         name={props.name}
       />
     </div>
