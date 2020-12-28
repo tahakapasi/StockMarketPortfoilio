@@ -17,6 +17,18 @@ class Company:
         self.ProfitHistory = kwargs['Profit History']
         self.InterestExpenseHistory = kwargs['Interest Expense History']
         self.Liabilities = kwargs['Liabilities']
+        self.Dividend = kwargs['Dividend']
+        self.Yield = kwargs['Dividend']
+        self.RevperEmployee = kwargs['RevperEmployee']
+        self.CogsInclDA = kwargs['Cogs_incl_DA']
+        self.CogsEnclDA = kwargs['Cogs_excl_DA']
+        self.GrossProfitMargin = kwargs['GrossProfitMargin']
+        self.SGAExpense = kwargs['SGAExpense']
+        self.UnusualExpense = kwargs['UnusualExpense']
+        self.EBITAAfterUnusualExpense = kwargs['EBITAfterUnusualExpense']
+        self.EPSHistorical = kwargs['EPSHistorical']
+        self.EBITDA = kwargs['EBITDA']
+        self.EBITDAMargin = kwargs['EBITDAMargin']
 
     def is_valid(self):
         if self.SYM != 'Y' and self.Price and isinstance(self.Price, float) and \

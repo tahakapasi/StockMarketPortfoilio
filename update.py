@@ -18,6 +18,7 @@ def get_data(row):
     if etf:
         if etf == 'Y':
             etf = True
+            return {}
         else:
             etf = False
     else:
@@ -25,7 +26,10 @@ def get_data(row):
     BASE_URL = main.HOME_URL + sym
     page = requests.get(f"{BASE_URL}")
     soup = BeautifulSoup(page.content, features='html.parser')
-    results = soup.find_all('span', {'class': 'Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)'})
+    results = soup.find_all('h1',{'class': 'company__name'})
+    if results:
+        name = results[0].get_text()
+    results = soup.find_all('bg-quote', {'class': 'value'})
     price = None
     try:
         price = results[0].get_text()
@@ -35,125 +39,161 @@ def get_data(row):
     except ValueError:
         print(f"Value Error {price}")
         price = None
-    results = soup.find_all('td', {'class': 'Ta(end) Fw(600) Lh(14px)'})
-
+    results = soup.find_all('li', {'class': 'kv__item'})
     volume = None
     avg_volume = None
     peratio = None
     market_cap = None
     eps = None
+    yield_data = None
+    dividend = None
+    revperemployee = None
     i = 0
     for result in results:
-        if i == 6:
-            volume = result.get_text()
-            if volume != 'N/A':
-                volume = float(volume.replace(',', ''))
-            else:
-                volume = None
+        data = result.get_text()
+        data = data.strip().split()
+        data = data[len(data) - 1]
+        if data == 'N/A':
+            data = None
+        if i == 3:
+            market_cap = data
+            if market_cap:
+                market_cap = convert_multiplier(market_cap)
         elif i == 7:
-            avg_volume = result.get_text()
-            if avg_volume != 'N/A' and avg_volume:
-                avg_volume = float(avg_volume.replace(',', ''))
-            else:
-                avg_volume = None
+            revperemployee = data
+            if revperemployee:
+                revperemployee = convert_multiplier(revperemployee)
         elif i == 8:
-            # TODO: convert this to a number
-            market_cap = result.get_text()
-            if market_cap != 'N/A':
-                if 'T' in market_cap:
-                    market_cap = float(market_cap.replace('T', ''))
-                    multiplier = 1000000000000
-                    market_cap = market_cap * multiplier
-                elif 'B' in market_cap:
-                    market_cap = float(market_cap.replace('B', ''))
-                    multiplier = 1000000000
-                    market_cap = market_cap * multiplier
-                elif 'M' in market_cap:
-                    market_cap = float(market_cap.replace('M', ''))
-                    multiplier = 1000000
-                    market_cap = market_cap * multiplier
-            else:
-                market_cap = None
-
+            peratio = data
+            if peratio:
+                peratio = float(peratio.replace(',', ''))
+        elif i == 9:
+            eps = data
+            if eps:
+                eps = float(eps.replace(',', '').replace('$',''))
         elif i == 10:
-            peratio = result.get_text()
-            if peratio != 'N/A':
-                try:
-                    peratio = float(peratio.replace(',', ''))
-                except ValueError:
-                    peratio = None
-            else:
-                peratio = None
+            yield_data = data
+            if yield_data:
+                yield_data = float(yield_data.replace(',','').replace('%',''))
         elif i == 11:
-            eps = result.get_text()
-            if eps != 'N/A':
-                eps = float(eps.replace(',', '').replace('%', ''))
-            else:
-                eps = None
+            dividend = data
+            if dividend:
+                dividend = float(dividend.replace(',','').replace('$',''))
+        elif i == 15:
+            avg_volume = data
+            if avg_volume:
+                avg_volume = convert_multiplier(avg_volume)
         i += 1
 
     profile_page = requests.get(f"{BASE_URL}{main.PROFILE}")
     soup = BeautifulSoup(profile_page.content, features='html.parser')
-    results = soup.find_all('span', {'class': 'Fw(600)'})
+    results = soup.find_all('li', {'class': 'kv__item w100'})
 
     i = 0
     sector = None
     industry = None
     for result in results:
+        data = result.get_text().strip().split('\n')
+        data = data[len(data) - 1]
         if i == 0:
-            sector = result.get_text()
+            sector = data
         elif i == 1:
-            industry = result.get_text()
+            industry = data
         i += 1
 
     financial_page = requests.get(f"{BASE_URL}{main.FINANCIALS}")
     soup = BeautifulSoup(financial_page.content, features='html.parser')
-    results = soup.find_all('div', {
-        'class': [
-            'Ta(c) Py(6px) Bxz(bb) BdB Bdc($seperatorColor) Miw(120px) '
-            'Miw(140px)--pnclg Bgc($lv1BgColor) fi-row:h_Bgc($hoverBgColor) D(tbc)',
-            'Ta(c) Py(6px) Bxz(bb) BdB Bdc($seperatorColor) Miw(120px) Miw(140px)--pnclg D(tbc)'
-        ]
-    })
-    i = 0
-    revenue_history = []
-    profit_history = []
-    interest_expense_history = []
-    for result in results:
-        data = result.get_text()
-        if data == '-' or not data:
-            continue
-        if i in [0, 1, 2, 3, 4]:
-            data = float(data.replace(',', ''))
-            revenue_history.append(data)
-        elif i in [10, 11, 12, 13, 14]:
-            data = float(data.replace(',', ''))
-            profit_history.append(data)
-        elif i in [40, 41, 42, 43, 44]:
-            data = float(data.replace(',', ''))
-            interest_expense_history.append(data)
-        i += 1
 
-    balance_page = requests.get(f"{BASE_URL}{main.BALANCE_SHEET}")
-    soup = BeautifulSoup(balance_page.content, features='html.parser')
-    results = soup.find_all('div', {
-        'class': [
-            'Ta(c) Py(6px) Bxz(bb) BdB Bdc($seperatorColor) Miw(120px) Miw(140px)--pnclg D(tbc)',
-            'Ta(c) Py(6px) Bxz(bb) BdB Bdc($seperatorColor) Miw(120px) Miw(140px)--pnclg Bgc($lv1BgColor)'
-            ' fi-row:h_Bgc($hoverBgColor) D(tbc)'
-        ]
-    })
-    liabilities = []
     i = 0
+    results = soup.find_all('th', {'class': 'overflow__heading'})
+    year_list = []
+    revenue_history = {}
+    interest_expense_history = {}
+    cogs_incl_da = {}
+    cogs_excl_da = {}
+    gross_profit_margin = {}
+    sga_expense = {}
+    unusual_expense = {}
+    ebit_after_unusual_expense = {}
+    net_income = {}
+    eps_historical = {}
+    ebitda = {}
+    ebitda_margin = {}
     for result in results:
-        if i in [128, 129, 130, 131]:
-            data = result.get_text()
-            if data:
-                data = float(data.replace(',', ''))
-            else:
-                data = None
-            liabilities.append(data)
+        if i > 0:
+            data = result.get_text().strip()
+            if data != '5-year trend':
+                year_list.append(int(data))
         i += 1
+    i = 1
+    j = 1
+    col_count = len(year_list)
+    results = soup.find_all('td', {'class': 'overflow__cell'})
+    row_data = {}
+    for result in results:
+        data = result.get_text().strip()
+        if 1 < i < len(year_list) + 1:
+            if data and data != '-':
+                if '(' in data:
+                    data = data.replace('(', '').replace(')', '')
+                    data = '-' + data
+                data = data.replace('%', '')
+                data = convert_multiplier(data)
+                row_data[year_list[i - 2]] = data
+            else:
+                row_data[year_list[i - 2]] = None
+
+        if not i % (col_count + 2):
+            if j == 1:
+                revenue_history = row_data
+            elif j == 3:
+                cogs_incl_da = row_data
+            elif j == 5:
+                cogs_excl_da = row_data
+            elif j == 11:
+                gross_profit_margin = row_data
+            elif j == 12:
+                sga_expense = row_data
+            elif j == 17:
+                unusual_expense = row_data
+            elif j == 18:
+                ebit_after_unusual_expense = row_data
+            elif j == 22:
+                interest_expense_history = row_data
+            elif j == 46:
+                net_income = row_data
+            elif j == 49:
+                eps_historical = row_data
+            elif j == 55:
+                ebitda = row_data
+            elif j == 57:
+                ebitda_margin = row_data
+            j += 1
+            i = 1
+            row_data = {}
+        else:
+            i += 1
+
+    # balance_page = requests.get(f"{BASE_URL}{main.BALANCE_SHEET}")
+    # soup = BeautifulSoup(balance_page.content, features='html.parser')
+    # results = soup.find_all('div', {
+    #     'class': [
+    #         'Ta(c) Py(6px) Bxz(bb) BdB Bdc($seperatorColor) Miw(120px) Miw(140px)--pnclg D(tbc)',
+    #         'Ta(c) Py(6px) Bxz(bb) BdB Bdc($seperatorColor) Miw(120px) Miw(140px)--pnclg Bgc($lv1BgColor)'
+    #         ' fi-row:h_Bgc($hoverBgColor) D(tbc)'
+    #     ]
+    # })
+    liabilities = []
+    # i = 0
+    # for result in results:
+    #     if i in [128, 129, 130, 131]:
+    #         data = result.get_text()
+    #         if data:
+    #             data = float(data.replace(',', ''))
+    #         else:
+    #             data = None
+    #         liabilities.append(data)
+    #     i += 1
     company_dict = {
         'SYM': sym,
         'Name': name,
@@ -167,11 +207,47 @@ def get_data(row):
         'Industry': industry,
         'Sector': sector,
         'Revenue History': revenue_history,
-        'Profit History': profit_history,
+        'Profit History': net_income,
         'Interest Expense History': interest_expense_history,
-        'Liabilities': liabilities
+        'Liabilities': liabilities,
+        'RevperEmployee': revperemployee,
+        'Dividend': dividend,
+        'Yield': yield_data,
+        'Cogs_incl_DA': cogs_incl_da,
+        'Cogs_excl_DA': cogs_excl_da,
+        'GrossProfitMargin': gross_profit_margin,
+        'SGAExpense': sga_expense,
+        'UnusualExpense': unusual_expense,
+        'EBITAfterUnusualExpense': ebit_after_unusual_expense,
+        'EPSHistorical': eps_historical,
+        'EBITDA': ebitda,
+        'EBITDAMargin': ebitda_margin
     }
     return company_dict
+
+
+def convert_multiplier(value) -> float:
+    value = value.replace('$', '').replace(',','')
+    if 'T' in value:
+        value = float(value.replace('T', ''))
+        multiplier = 1000000000000
+        value = value * multiplier
+    elif 'B' in value:
+        value = float(value.replace('B', ''))
+        multiplier = 1000000000
+        value = value * multiplier
+    elif 'M' in value:
+        value = float(value.replace('M', ''))
+        multiplier = 1000000
+        value = value * multiplier
+    elif 'K' in value:
+        value = float(value.replace('K', ''))
+        multiplier = 1000
+        value = value * multiplier
+    else:
+        value = float(value)
+    return value
+
 
 COMPANIES = []
 PREPROCESSED = []
@@ -217,14 +293,15 @@ other_list_loader()
 for entity in PREPROCESSED:
     company_dict = get_data(entity)
     # pp.pprint(company_dict)
-    cmpny = company.Company(**company_dict)
-    COMPANIES.append(cmpny)
-    main_counter += 1
+    if company_dict:
+        cmpny = company.Company(**company_dict)
+        COMPANIES.append(cmpny)
+        main_counter += 1
     if main_counter % 100 == 0:
         print(main_counter)
-    for c in COMPANIES:
-        if not c.Price:
-            COMPANIES.remove(c)
+for c in COMPANIES:
+    if not c.Price:
+        COMPANIES.remove(c)
 with open(main.DATA_FILE, "wb") as f:
     pickle.dump(COMPANIES, f)
 print(f"Complete: {datetime.datetime.now()}")

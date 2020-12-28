@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9c92dbb0-8101-4b30-8b4e-292f4dbb6739" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/company.py" beforeDir="false" afterPath="$PROJECT_DIR$/company.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/nasdaqlisted.txt" beforeDir="false" afterPath="$PROJECT_DIR$/nasdaqlisted.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/update.py" beforeDir="false" afterPath="$PROJECT_DIR$/update.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,7 +35,7 @@
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.update">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="StockMarketPortfoilio" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -102,8 +101,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.app" />
         <item itemvalue="Python.update" />
+        <item itemvalue="Python.app" />
       </list>
     </recent_temporary>
   </component>
