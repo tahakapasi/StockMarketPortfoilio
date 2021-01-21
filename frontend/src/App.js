@@ -35,7 +35,7 @@ class App extends Component {
 
   fetchCompanyList() {
     axios
-      .post("http://192.168.29.183:5000/filter", this.state.FilterParameters)
+      .post("http://192.168.0.214:5000/filter", this.state.FilterParameters)
       .then((response) => {
         console.log(response.data.List);
         this.setState({ Companies: response.data.List });
@@ -43,7 +43,7 @@ class App extends Component {
   }
 
   getMinMax() {
-    axios.get("http://192.168.29.183:5000/minmax").then((response) => {
+    axios.get("http://192.168.0.214:5000/minmax").then((response) => {
       this.setState({
         MinMax: JSON.parse(JSON.stringify(response.data)),
         FilterParameters: JSON.parse(JSON.stringify(response.data)),

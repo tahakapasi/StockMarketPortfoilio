@@ -26,7 +26,7 @@ def get_data(row):
     BASE_URL = main.HOME_URL + sym
     page = requests.get(f"{BASE_URL}")
     soup = BeautifulSoup(page.content, features='html.parser')
-    results = soup.find_all('h1',{'class': 'company__name'})
+    results = soup.find_all('h1', {'class': 'company__name'})
     if results:
         name = results[0].get_text()
     results = soup.find_all('bg-quote', {'class': 'value'})
@@ -70,15 +70,15 @@ def get_data(row):
         elif i == 9:
             eps = data
             if eps:
-                eps = float(eps.replace(',', '').replace('$',''))
+                eps = float(eps.replace(',', '').replace('$', ''))
         elif i == 10:
             yield_data = data
             if yield_data:
-                yield_data = float(yield_data.replace(',','').replace('%',''))
+                yield_data = float(yield_data.replace(',', '').replace('%', ''))
         elif i == 11:
             dividend = data
             if dividend:
-                dividend = float(dividend.replace(',','').replace('$',''))
+                dividend = float(dividend.replace(',', '').replace('$', ''))
         elif i == 15:
             avg_volume = data
             if avg_volume:
@@ -227,7 +227,7 @@ def get_data(row):
 
 
 def convert_multiplier(value) -> float:
-    value = value.replace('$', '').replace(',','')
+    value = value.replace('$', '').replace(',', '')
     if 'T' in value:
         value = float(value.replace('T', ''))
         multiplier = 1000000000000
@@ -290,8 +290,14 @@ pp = pprint.PrettyPrinter(indent=3)
 main_counter = 0
 nasdaq_list_loader()
 other_list_loader()
+failure_count = 0
 for entity in PREPROCESSED:
-    company_dict = get_data(entity)
+    try:
+        company_dict = get_data(entity)
+    except Exception as e:
+        print(entity)
+        failure_count += 1
+        continue
     # pp.pprint(company_dict)
     if company_dict:
         cmpny = company.Company(**company_dict)
@@ -305,3 +311,4 @@ for c in COMPANIES:
 with open(main.DATA_FILE, "wb") as f:
     pickle.dump(COMPANIES, f)
 print(f"Complete: {datetime.datetime.now()}")
+print(f"Failed: {failure_count}")

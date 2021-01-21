@@ -32,18 +32,19 @@ def limits():
         'EPS': {'Min': None, 'Max': None}
     }
     for c in companies:
+        print(c.is_valid)
         if c.is_valid():
-            for property in minmax_properties:
-                current_value = getattr(c, property)
+            for prop in minmax_properties:
+                current_value = getattr(c, prop)
                 if isinstance(current_value, float):
-                    if not minmax_properties[property]['Min']:
-                        minmax_properties[property]['Min'] = current_value
-                    if not minmax_properties[property]['Max']:
-                        minmax_properties[property]['Max'] = current_value
-                    if current_value < minmax_properties[property]['Min']:
-                        minmax_properties[property]['Min'] = current_value
-                    if current_value > minmax_properties[property]['Max']:
-                        minmax_properties[property]['Max'] = current_value
+                    if not minmax_properties[prop]['Min']:
+                        minmax_properties[prop]['Min'] = current_value
+                    if not minmax_properties[prop]['Max']:
+                        minmax_properties[prop]['Max'] = current_value
+                    if current_value < minmax_properties[prop]['Min']:
+                        minmax_properties[prop]['Min'] = current_value
+                    if current_value > minmax_properties[prop]['Max']:
+                        minmax_properties[prop]['Max'] = current_value
     return jsonify(minmax_properties)
 
 
@@ -108,7 +109,7 @@ def filter_stock():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='192.168.0.214')
     # with open(DATA_FILE, 'rb') as f:
     #     companies = pickle.load(f)
     # print(len(companies))
